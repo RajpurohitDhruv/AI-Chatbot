@@ -9,8 +9,13 @@ st.set_page_config(
 )
 
 # Configure Gemini API
-api_key = st.secrets["API_KEY"]
-genai.configure(api_key=api_key)
+if "general" not in st.secrets or "API_KEY" not in st.secrets["general"]:
+    st.error("API_KEY is missing in the Streamlit secrets!")
+    st.stop()
+else:
+    api_key = st.secrets["general"]["API_KEY"]
+    genai.configure(api_key=api_key)
+
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 # Persona for the chatbot
